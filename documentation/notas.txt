@@ -1,0 +1,106 @@
+Condiciones:
+	- Ejecutables: client, server.
+	- Makefile
+	- Libft OK
+	- No leaks
+	- 1 variable global por programa (justificarla)
+	- Funciones permitidas
+		- Write
+		- ft_printf
+		- signal
+		- sigemptyset
+		- sigaddset
+		- sigaction
+		- kill
+		- getpid
+		- malloc
+		- free
+		- pause
+		- sleep
+		- usleep
+		- exit
+
+Objetivo:
+	- Crear un programa cliente-servidor.
+	- El servidor se inicia primero y muestra su PID.
+	- El cliente necesita: PID del servidor y string para enviar.
+	- El cliente envía la string, el servidor la muestra.
+	- Mostrar la string rápidamente (casi instantaneo)
+	- El servidor puede recibir strings de varios clientes sin necesidad de reinicio.
+	- La comunicación mediante señales UNIX: SIGUSR1 y SIGUSR2.
+	- Linux no encola señales del mismo tipo si ya hay pendientes.
+
+	Bonus:
+		- Señal de recibido del servidor al cliente.
+		- Soporta los caracteres Unicode.
+
+PLANTEAMIENTO:
+
+	1.Buscar informacion sobre señales UNIX y funciones permitidas
+	2.Buscar ejemplos o informacion sobre el proyecto.
+	3.Definir un funcionamiento general / algoritmo.
+	4.Definir tareas y objetivos especificos
+	5.A PROGRAMAR!!
+
+Funciones permitidas
+	- Write
+	- ft_printf
+	- signal:
+		Uso: Establece el manejador de una señal específica.
+		Descripción: se usa para definir la acción que un programa realizará al recibir una señal específica.
+		Ejemplo: signal(SIGINT, handler); handler es la función que se ejecutará cuando se reciba la señal SIGINT.
+	- sigemptyset:
+		Uso: Inicializa un conjunto de señales(grupo de distintas señales que dispararan un mismo comportamiento) para que esté vacío.
+		Descripción: se usa para inicializar un conjunto de señales a "0" (sin ningun tipo de señal incluida). 
+			Es útil para poder añadir señales a un grupo que sabemos que esta vacio.
+		Ejemplo: sigemptyset(&set); prepara set para que no contenga ninguna señal.
+	- sigaddset:
+		Uso: Añade una señal a un conjunto de señales.
+		Descripción: Es útil para construir conjuntos de señales que se usarán para bloquear, desbloquear o esperar señales específicas.
+		Ejemplo: sigaddset(&set, SIGINT); añade SIGINT al conjunto de señales set.
+	- sigaction:
+		Uso: Define o recupera la acción asociada a una señal específica.
+		Descripción: Más avanzada que signal, esta función permite especificar con mayor detalle el comportamiento ante una señal.
+			Incluyendo qué manejador ejecutar, qué señales bloquear, y diversas flags para controlar el comportamiento del manejador.
+			Se utiliza un struct sigaction para especificar estas opciones.
+		Ejemplo: sigaction(SIGINT, &act, NULL); configura la acción para SIGINT usando los parámetros especificados en act.
+	- kill
+	- getpid
+	- malloc
+	- free
+	- pause:
+		Uso: Detiene la ejecución del programa hasta que reciba alguna señal que debe manejar o terminar el proceso.
+		Contexto: Utilizada en programas que esperan activamente señales para proceder.
+		Retorno: Generalmente retorna -1, indicando que fue interrumpida por una señal.
+	- sleep:
+		Uso: Suspende la ejecución del programa por un número específico de segundos.
+		Contexto: Útil en programas que necesitan esperar por un periodo de tiempo antes de continuar, como en el polling o para reducir el uso de CPU.
+		Retorno: 0 si el tiempo especificado ha transcurrido, o el número de segundos restantes si fue interrumpido por una señal.
+	- usleep:
+		Uso: Similar a sleep, pero suspende la ejecución del programa por un número específico de microsegundos (1/1,000,000 de segundo).
+		Contexto: Para esperas más precisas que sleep. Importante en programación de tiempo real o cuando se necesitan pausas breves.
+		Retorno: 0 en éxito, o -1 en error. Su comportamiento puede variar según el sistema.
+	- exit:
+		Uso: Termina la ejecución del programa inmediatamente.
+		Contexto: Se utiliza para salir de un programa, opcionalmente devolviendo un código de estado al sistema operativo.
+		Retorno: No retorna, porque termina el proceso.
+
+FUNCIONAMIENTO GENERAL:
+
+	- Cliente envia los caracteres uno a uno en binario
+		Lee el PID y mensaje a enviar
+		Itera por cada caracter
+		Lo convierte a binario (Un caracter = 8 bits = 1 Byte)
+		Envia el byte haciendo uso de SIGUSR1 (=1) y SIGUSR2(=0)
+		Espera unos microsegundos para dar tiempo al servidor a procesar el envio
+		BONUS: imprime las señales de confirmacion recibidas
+
+	- Muestra su PID, recive los bytes, los procesa e imprime el caracter correspondiente
+		Muestra el PID
+		Espera a recibir una señal
+		Procesa la señal
+			Almacena hasta 8 señales (1 Byte)
+				Procesa el byte e imprime el caracter correspondiente
+		BONUS: envia una señal igual a la recibida como confirmacion
+	
+		
