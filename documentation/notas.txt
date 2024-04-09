@@ -64,7 +64,10 @@ Funciones permitidas
 			Incluyendo qué manejador ejecutar, qué señales bloquear, y diversas flags para controlar el comportamiento del manejador.
 			Se utiliza un struct sigaction para especificar estas opciones.
 		Ejemplo: sigaction(SIGINT, &act, NULL); configura la acción para SIGINT usando los parámetros especificados en act.
-	- kill
+	- kill:
+		Uso: permite a un programa enviar cualquier señal a cualquier proceso.
+		Sintaxis: int kill(pid_t pid, int sig);
+		Retorno: Retorna 0 en éxito y -1 en caso de error.
 	- getpid
 	- malloc
 	- free
