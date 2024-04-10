@@ -106,4 +106,8 @@ FUNCIONAMIENTO GENERAL:
 				Procesa el byte e imprime el caracter correspondiente
 		BONUS: envia una señal igual a la recibida como confirmacion
 	
-		
+Funciones a hacer:
+
+	- ft_char_to_byte
+	- ft_byte_to_char
+	- ft_send_byte
