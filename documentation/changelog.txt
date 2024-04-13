@@ -1,0 +1,11 @@
+SABADO 13/04:
+
+	Cambios:
+		- Escrito cliente
+		- Escrito main del server y funciones basicas
+
+	Seguir con:
+		- Escribir ft_byte_to_char
+		- Escribir funciones de debug
+		- Probar
+		- Añadir confirmacion de recepcion

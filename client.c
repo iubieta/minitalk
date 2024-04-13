@@ -10,18 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int*	ft_send_signal(char c, int PID)
+int*	ft_send_char(char c, int PID)
 {
-	int*	byte;
 	int		i;
 
 	i = 7;
 	while (i-- >= 0)
 	{
-		if (c & (1 << i) == 1)
+		if (c & (1 << i))
 			kill(PID, SIGUSR1);
 		else
 			kill(PID, SIGUSR2);
+		usleep(30);
+	}
+}
+
+//ft_confirmation();
+
+void main(char *message, int PID)
+{
+	char *c;
+
+	while (*message)
+	{
+		ft_send_char(*message,PID);
+		message++;
 		usleep(30);
 	}
 	
