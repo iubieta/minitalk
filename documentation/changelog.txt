@@ -9,3 +9,14 @@ SABADO 13/04:
 		- Escribir funciones de debug
 		- Probar
 		- Añadir confirmacion de recepcion
+
+DOMINGO 14/04:
+
+	Cambios:
+		- Añadido salto de linea al final del cliente para asegurar impresion
+		- Terminado server el procesamiento del byte se hace en el bucle principal (no uso ft_byte_to_char)
+
+	Seguir con:
+		- Escribir Makefile
+		- Probar a procesar byte en la interrupcion
+		- Añadir Bonus
