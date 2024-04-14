@@ -108,5 +108,4 @@ FUNCIONAMIENTO GENERAL:
 	
 Funciones a hacer:
 
-	- ft_byte_to_char
 	- ft_send_byte

@@ -14,65 +14,55 @@
 #include <unistd.h>
 #include <signal.h>
 
-int	ft_rx_signal(int signal)
+int	rx_bit;
+
+void	ft_rx_signal(int signal)
 {
 	if (signal == SIGUSR1)
-		*rx_bit = 1;
+		rx_bit = 1;
 	else if (signal == SIGUSR2)
-		*rx_bit = 0;
+		rx_bit = 0;
 }
 
-char	ft_byte_to_char(int byte[8])
+void	ft_wait_for_char()
 {
-	
-}
-
-void	ft_server_loop(int byte[8], int i)
-{
-	int			i;
-	int			byte[8];
+	int				i;
+	unsigned char	c;
 		
 	i = 0;
-	byte = {-1};
+	c = 0;
 	while (1)
 	{
 		if (rx_bit != -1)
 		{
-			byte[i] = rx_bit;
+			c = c | (rx_bit << i);
+			//printf("%i:%i\n",i,rx_bit);
 			rx_bit = -1;
+			i++;
 			if (i == 8)
 			{
-				c = ft_byte_to_char(byte);
-				write(1,&c,1);
+				printf("%c",c);
 				i = 0;
-				byte = {-1};
+				c = 0;
 			}
-			else
-				i++;
 		}
 	}
 }
 
 int main()
 {
-	static int	rx_bit;
-
 	rx_bit = -1;
-	ft_printf("PID: %i", getpid());
+	//setbuf(stdout, NULL);
+	printf("PID: %i\n", getpid());
 	if (signal(SIGUSR1, ft_rx_signal) == SIG_ERR) 
 	{
-		ft_printf("Error de señal");
+		printf("Error de señal\n");
 		return 1;
 	}
-	else
-		printf("S: rx = %i", rx_bit);
 	if (signal(SIGUSR2, ft_rx_signal) == SIG_ERR) 
 	{
-		ft_printf("Error de señal");
+		printf("Error de señal\n");
 		return 1;
 	}
-	else
-		printf("S: rx = %i", rx_bit);
-	
-	ft_server_loop();
+	ft_wait_for_char();
 }

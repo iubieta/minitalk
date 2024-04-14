@@ -10,34 +10,48 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
+#include <unistd.h>
 
-int*	ft_send_char(char c, int PID)
+void	ft_send_char(char c, int PID)
 {
 	int		i;
 
-	i = 7;
-	while (i-- >= 0)
+	i = 0;
+	while (i < 8)
 	{
 		if (c & (1 << i))
 			kill(PID, SIGUSR1);
 		else
 			kill(PID, SIGUSR2);
-		usleep(30);
+		usleep(100);
+		i++;
 	}
 }
 
 //ft_confirmation();
 
-void main(char *message, int PID)
+int main(int argc, char *argv[]) 
 {
-	char *c;
-
-	while (*message)
+    if (argc != 3)
 	{
-		ft_send_char(*message,PID);
-		message++;
-		usleep(30);
-	}
-	
+        printf("ERROR: Usage: %s <PID> <Message>\n", argv[0]);
+        return 1;
+    }
+
+    int PID = atoi(argv[1]);
+	printf("PID: %i\n", PID);
+    unsigned char *message = argv[2];
+	printf("Message: %s\n", message);
+
+    while (*message)
+	{
+        ft_send_char(*message, PID);
+        message++;
+    }
+	ft_send_char(*"\n",PID);
+
+    return (0);
 }
