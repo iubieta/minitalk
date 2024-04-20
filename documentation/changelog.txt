@@ -20,3 +20,13 @@ DOMINGO 14/04:
 		- Escribir Makefile
 		- Probar a procesar byte en la interrupcion
 		- Añadir Bonus
+
+SABADO 20/04:
+
+	Cambios:
+		- Replanteamiento del server y cliente (procesado dentro de la interrupcion)
+		- Makefile hecho
+
+	Seguir con:
+		- Bonus
+		

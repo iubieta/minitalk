@@ -14,44 +14,44 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include "./libs/printf/ft_printf.h"
 
-void	ft_send_char(char c, int PID)
+void	ft_send_char(unsigned char c, int PID)
 {
 	int		i;
 
-	i = 0;
-	while (i < 8)
+	i = 8;
+	while (i > 0)
 	{
-		if (c & (1 << i))
+		if (c & (1 << (i - 1)))
 			kill(PID, SIGUSR1);
 		else
 			kill(PID, SIGUSR2);
+		i--;
 		usleep(100);
-		i++;
 	}
 }
 
 //ft_confirmation();
 
-int main(int argc, char *argv[]) 
+int main(int argc, char **argv) 
 {
     if (argc != 3)
 	{
-        printf("ERROR: Usage: %s <PID> <Message>\n", argv[0]);
+        ft_printf("ERROR: Usage: %s <PID> <Message>\n", argv[0]);
         return 1;
     }
 
     int PID = atoi(argv[1]);
-	printf("PID: %i\n", PID);
-    unsigned char *message = argv[2];
-	printf("Message: %s\n", message);
+	ft_printf("PID: %i\n", PID);
+    char *message = argv[2];
+	ft_printf("Message: %s\n", message);
 
     while (*message)
 	{
-        ft_send_char(*message, PID);
+        ft_send_char((unsigned char)*message, PID);
         message++;
     }
-	ft_send_char(*"\n",PID);
 
     return (0);
 }

@@ -13,56 +13,37 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include "./libs/printf/ft_printf.h"
 
-int	rx_bit;
 
-void	ft_rx_signal(int signal)
+void	ft_signal(int signal)
 {
-	if (signal == SIGUSR1)
-		rx_bit = 1;
+	static int				i = 0;
+	static unsigned char	byte = 0;
+
+/* 	if (signal == SIGUSR1)
+		printf("1");
 	else if (signal == SIGUSR2)
-		rx_bit = 0;
-}
-
-void	ft_wait_for_char()
-{
-	int				i;
-	unsigned char	c;
-		
-	i = 0;
-	c = 0;
-	while (1)
+		printf("0"); */
+	byte |= (signal == SIGUSR1);
+	i++;
+	if (i == 8)
 	{
-		if (rx_bit != -1)
-		{
-			c = c | (rx_bit << i);
-			//printf("%i:%i\n",i,rx_bit);
-			rx_bit = -1;
-			i++;
-			if (i == 8)
-			{
-				printf("%c",c);
-				i = 0;
-				c = 0;
-			}
-		}
+		//printf("\n");
+		ft_printf("%c", byte);
+		i = 0;
+		byte = 0;
 	}
+	else
+		byte <<= 1;
 }
 
 int main()
 {
-	rx_bit = -1;
-	//setbuf(stdout, NULL);
-	printf("PID: %i\n", getpid());
-	if (signal(SIGUSR1, ft_rx_signal) == SIG_ERR) 
-	{
-		printf("Error de señal\n");
-		return 1;
-	}
-	if (signal(SIGUSR2, ft_rx_signal) == SIG_ERR) 
-	{
-		printf("Error de señal\n");
-		return 1;
-	}
-	ft_wait_for_char();
+	ft_printf("PID: %i\n", getpid());
+	signal(SIGUSR1, ft_signal);
+	signal(SIGUSR2, ft_signal);
+	while (1)
+		pause();
+	return (0);
 }
