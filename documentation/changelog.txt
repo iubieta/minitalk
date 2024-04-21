@@ -34,4 +34,6 @@ DOMINGO 21/04:
 
 	Cambios:
 		- Norminette correjida
-		
+		- Eliminada libft (actualizado  Makefile acorde)
+		- Renombrada carpeta del proyecto
+		- Añadido gitignore		
