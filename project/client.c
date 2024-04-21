@@ -34,24 +34,24 @@ void	ft_send_char(unsigned char c, int PID)
 
 //ft_confirmation();
 
-int main(int argc, char **argv) 
+int	main(int argc, char **argv)
 {
-    if (argc != 3)
-	{
-        ft_printf("ERROR: Usage: %s <PID> <Message>\n", argv[0]);
-        return 1;
-    }
+	int		pid;
+	char	*message;
 
-    int PID = atoi(argv[1]);
-	ft_printf("PID: %i\n", PID);
-    char *message = argv[2];
+	if (argc != 3)
+	{
+		ft_printf("ERROR: Usage: %s <PID> <Message>\n", argv[0]);
+		return (1);
+	}
+	pid = atoi(argv[1]);
+	message = argv[2];
+	ft_printf("PID: %i\n", pid);
 	ft_printf("Message: %s\n", message);
-
-    while (*message)
+	while (*message)
 	{
-        ft_send_char((unsigned char)*message, PID);
-        message++;
-    }
-
-    return (0);
+		ft_send_char((unsigned char)*message, pid);
+		message++;
+	}
+	return (0);
 }

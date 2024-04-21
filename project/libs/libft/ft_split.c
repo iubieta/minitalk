@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iubieta- <iubieta-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 18:48:55 by iubieta-          #+#    #+#             */
-/*   Updated: 2023/10/21 18:45:31 by iubieta-         ###   ########.fr       */
+/*   Updated: 2024/04/21 12:45:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_cont_substr(char const *s, char c)
 {
 	size_t	cont;
 	size_t	i;
-	
+
 	i = 0;
 	cont = 0;
 	while (s[i])

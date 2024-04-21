@@ -106,6 +106,4 @@ FUNCIONAMIENTO GENERAL:
 				Procesa el byte e imprime el caracter correspondiente
 		BONUS: envia una señal igual a la recibida como confirmacion
 	
-Funciones a hacer:
-
-	- ft_send_byte
+NOTA: procesar la señal en la interrupcion elimina la espera del buffer y es mas rapido.

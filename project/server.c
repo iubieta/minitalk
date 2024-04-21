@@ -15,21 +15,15 @@
 #include <signal.h>
 #include "./libs/printf/ft_printf.h"
 
-
 void	ft_signal(int signal)
 {
 	static int				i = 0;
 	static unsigned char	byte = 0;
 
-/* 	if (signal == SIGUSR1)
-		printf("1");
-	else if (signal == SIGUSR2)
-		printf("0"); */
 	byte |= (signal == SIGUSR1);
 	i++;
 	if (i == 8)
 	{
-		//printf("\n");
 		ft_printf("%c", byte);
 		i = 0;
 		byte = 0;
@@ -38,7 +32,7 @@ void	ft_signal(int signal)
 		byte <<= 1;
 }
 
-int main()
+int	main(void)
 {
 	ft_printf("PID: %i\n", getpid());
 	signal(SIGUSR1, ft_signal);
