@@ -64,5 +64,6 @@ clean:
 
 fclean: clean
 	@rm -f $(NAME_S) $(NAME_C)
+	@rm -f $(NAME_S_BONUS) $(NAME_C_BONUS)
 
 re: fclean all
