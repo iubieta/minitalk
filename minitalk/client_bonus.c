@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iubieta- <iubieta-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 14:06:55 by iubieta-          #+#    #+#             */
-/*   Updated: 2024/05/01 14:18:09 by iubieta-         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:31:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,18 @@ void	ft_send_char(unsigned char c, int PID)
 
 void	ft_confirmation(int signal)
 {
+	static int	i = 0;
+
 	if (signal == SIGUSR1)
 		ft_printf("1");
 	else if (signal == SIGUSR2)
 		ft_printf("0");
+	i++;
+	if (i == 8)
+	{
+		ft_printf("\n");
+		i = 0;
+	}
 }
 
 int	main(int argc, char **argv)
