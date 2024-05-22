@@ -15,28 +15,41 @@
 #include <signal.h>
 #include "./libs/printf/ft_printf.h"
 
-void	ft_signal(int signal)
+void	sig_handler(int signal, siginfo_t *info, void *context)
 {
+	static int				client;
 	static int				i = 0;
 	static unsigned char	byte = 0;
 
+	(void)context;
+	client = info->si_pid;
+	//printf("%i\n",client);
 	byte |= (signal == SIGUSR1);
 	i++;
+	//printf("%i ",i);
 	if (i == 8)
 	{
 		ft_printf("%c", byte);
+		if (byte == '\0')
+			client = 0;
 		i = 0;
 		byte = 0;
 	}
 	else
 		byte <<= 1;
+	kill(client, SIGUSR1);
 }
 
 int	main(void)
 {
+	struct 	sigaction sa;
+  
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART | SA_SIGINFO;
+	sa.sa_sigaction = &sig_handler;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("PID: %i\n", getpid());
-	signal(SIGUSR1, ft_signal);
-	signal(SIGUSR2, ft_signal);
 	while (1)
 		pause();
 	return (0);

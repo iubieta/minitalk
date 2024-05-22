@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include "./libs/printf/ft_printf.h"
 
+static int rx = 0;
+
 void	ft_send_char(unsigned char c, int PID)
 {
 	int		i;
@@ -28,7 +30,8 @@ void	ft_send_char(unsigned char c, int PID)
 		else
 			kill(PID, SIGUSR2);
 		i--;
-		usleep(100);
+		//while (!rx)
+			usleep(100);
 	}
 }
 
@@ -43,9 +46,10 @@ void	ft_confirmation(int signal)
 	i++;
 	if (i == 8)
 	{
-		ft_printf("\n");
+		ft_printf(" ");
 		i = 0;
 	}
+	rx = 1;
 }
 
 int	main(int argc, char **argv)
