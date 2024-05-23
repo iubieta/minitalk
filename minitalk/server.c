@@ -31,7 +31,10 @@ void	sig_handler(int signal, siginfo_t *info, void *context)
 	{
 		ft_printf("%c", byte);
 		if (byte == '\0')
+		{
 			client = 0;
+			ft_printf("\n");
+		}
 		i = 0;
 		byte = 0;
 	}

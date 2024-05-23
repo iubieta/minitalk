@@ -56,6 +56,7 @@ int	main(int argc, char **argv)
 {
 	int		pid;
 	char	*message;
+	char	nl = '\n';
 	struct 	sigaction sa;
   
 	sigemptyset(&sa.sa_mask);
@@ -77,5 +78,6 @@ int	main(int argc, char **argv)
 		ft_send_char((unsigned char)*message, pid);
 		message++;
 	}
+	ft_send_char((unsigned char)nl, pid);
 	return (0);
 }
