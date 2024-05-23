@@ -16,15 +16,14 @@
 #include <unistd.h>
 #include "./libs/printf/ft_printf.h"
 
-static int rx = 0;
+static int	g_rx = 0;
 
 void	sig_handler(int signal, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	//printf("rx ");
 	if (signal == SIGUSR1)
-		rx = 1;
+		g_rx = 1;
 }
 
 void	ft_send_char(unsigned char c, int PID)
@@ -36,29 +35,38 @@ void	ft_send_char(unsigned char c, int PID)
 	{
 		if (c & (1 << (i - 1)))
 		{
-			//printf("1 ");
 			kill(PID, SIGUSR1);
 		}
 		else
 		{
-			//printf("0 ");
 			kill(PID, SIGUSR2);
 		}
-		while (rx == 0)
+		while (g_rx == 0)
 			usleep(100);
-		rx = 0;
+		g_rx = 0;
 		i--;
 	}
-	//printf("\n");
+}
+
+void	ft_send_message(char *message, int pid)
+{
+	char	nl;
+
+	nl = '\n';
+	while (*message)
+	{
+		ft_send_char((unsigned char)*message, pid);
+		message++;
+	}
+	ft_send_char((unsigned char)nl, pid);
 }
 
 int	main(int argc, char **argv)
 {
-	int		pid;
-	char	*message;
-	char	nl = '\n';
-	struct 	sigaction sa;
-  
+	int					pid;
+	char				*message;
+	struct sigaction	sa;
+
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART | SA_SIGINFO;
 	sa.sa_sigaction = sig_handler;
@@ -73,11 +81,6 @@ int	main(int argc, char **argv)
 	message = argv[2];
 	ft_printf("PID: %i\n", pid);
 	ft_printf("Message: %s\n", message);
-	while (*message)
-	{
-		ft_send_char((unsigned char)*message, pid);
-		message++;
-	}
-	ft_send_char((unsigned char)nl, pid);
+	ft_send_message(message, pid);
 	return (0);
 }

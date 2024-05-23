@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: iubieta- <iubieta-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 14:06:55 by iubieta-          #+#    #+#             */
-/*   Updated: 2024/05/06 20:31:29 by marvin           ###   ########.fr       */
+/*   Updated: 2024/05/23 19:18:02 by iubieta-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,14 @@
 #include <unistd.h>
 #include "./libs/printf/ft_printf.h"
 
-static int rx = 0;
+static int	g_rx = 0;
 
-void	ft_send_char(unsigned char c, int PID)
-{
-	int		i;
-
-	i = 8;
-	while (i > 0)
-	{
-		if (c & (1 << (i - 1)))
-			kill(PID, SIGUSR1);
-		else
-			kill(PID, SIGUSR2);
-		i--;
-		//while (!rx)
-			usleep(100);
-	}
-}
-
-void	ft_confirmation(int signal)
+void	sig_handler(int signal, siginfo_t *info, void *context)
 {
 	static int	i = 0;
 
+	(void)info;
+	(void)context;
 	if (signal == SIGUSR1)
 		ft_printf("1");
 	else if (signal == SIGUSR2)
@@ -49,16 +34,55 @@ void	ft_confirmation(int signal)
 		ft_printf(" ");
 		i = 0;
 	}
-	rx = 1;
+	g_rx = 1;
+}
+
+void	ft_send_char(unsigned char c, int PID)
+{
+	int		i;
+
+	i = 8;
+	while (i > 0)
+	{
+		if (c & (1 << (i - 1)))
+		{
+			kill(PID, SIGUSR1);
+		}
+		else
+		{
+			kill(PID, SIGUSR2);
+		}
+		while (g_rx == 0)
+			usleep(100);
+		g_rx = 0;
+		i--;
+	}
+}
+
+void	ft_send_message(char *message, int pid)
+{
+	char	nl;
+
+	nl = '\n';
+	while (*message)
+	{
+		ft_send_char((unsigned char)*message, pid);
+		message++;
+	}
+	ft_send_char((unsigned char)nl, pid);
 }
 
 int	main(int argc, char **argv)
 {
-	int		pid;
-	char	*message;
+	int					pid;
+	char				*message;
+	struct sigaction	sa;
 
-	signal(SIGUSR1, ft_confirmation);
-	signal(SIGUSR2, ft_confirmation);
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART | SA_SIGINFO;
+	sa.sa_sigaction = sig_handler;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	if (argc != 3)
 	{
 		ft_printf("ERROR: Usage: %s <PID> <Message>\n", argv[0]);
@@ -68,10 +92,6 @@ int	main(int argc, char **argv)
 	message = argv[2];
 	ft_printf("PID: %i\n", pid);
 	ft_printf("Message: %s\n", message);
-	while (*message)
-	{
-		ft_send_char((unsigned char)*message, pid);
-		message++;
-	}
+	ft_send_message(message, pid);
 	return (0);
 }

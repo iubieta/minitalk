@@ -6,14 +6,14 @@
 /*   By: iubieta- <iubieta-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 13:39:08 by iubieta-          #+#    #+#             */
-/*   Updated: 2024/05/01 14:02:46 by iubieta-         ###   ########.fr       */
+/*   Updated: 2024/05/23 18:55:43 by iubieta-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <signal.h>
 
-void	ft_signal(int signal, siginfo_t *info, void *context)
+void	sig_handler(int signal, siginfo_t *info, void *context)
 {
 	static int				i = 0;
 	static unsigned char	byte = 0;
@@ -37,14 +37,14 @@ void	ft_signal(int signal, siginfo_t *info, void *context)
 
 int	main(void)
 {
-	struct sigaction	signal;
+	struct sigaction	sa;
 
-	signal.sa_sigaction = &ft_signal;
-	signal.sa_flags = SA_SIGINFO;
-	sigemptyset(&signal.sa_mask);
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART | SA_SIGINFO;
+	sa.sa_sigaction = &sig_handler;
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("PID: %i\n", getpid());
-	sigaction(SIGUSR1, &signal, NULL);
-	sigaction(SIGUSR2, &signal, NULL);
 	while (1)
 		pause();
 	return (0);

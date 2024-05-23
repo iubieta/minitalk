@@ -23,18 +23,11 @@ void	sig_handler(int signal, siginfo_t *info, void *context)
 
 	(void)context;
 	client = info->si_pid;
-	//printf("%i\n",client);
 	byte |= (signal == SIGUSR1);
 	i++;
-	//printf("%i ",i);
 	if (i == 8)
 	{
 		ft_printf("%c", byte);
-		if (byte == '\0')
-		{
-			client = 0;
-			ft_printf("\n");
-		}
 		i = 0;
 		byte = 0;
 	}
@@ -45,8 +38,8 @@ void	sig_handler(int signal, siginfo_t *info, void *context)
 
 int	main(void)
 {
-	struct 	sigaction sa;
-  
+	struct sigaction	sa;
+
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART | SA_SIGINFO;
 	sa.sa_sigaction = &sig_handler;

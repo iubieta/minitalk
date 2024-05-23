@@ -48,3 +48,5 @@ JUEVES 23/05:
 
 	Cambios:
 		- Añadido salto de linea al final del mensaje
+		- Actualizado el bonus con respecto al ejercicio basico
+		- Norminette pasada
