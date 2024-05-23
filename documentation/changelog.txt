@@ -43,3 +43,8 @@ MIERCOLES 22/05:
 	Cambios:
 		- Makefile correjido hace tiempo
 		- Replanteamiento con espera de confirmacion en el cliente
+
+JUEVES 23/05:
+
+	Cambios:
+		- Añadido salto de linea al final del mensaje
